@@ -131,3 +131,9 @@ gevExpInfo <- function(scale, shape, eps = 3e-3) {
   dimnames(val) <- list(c("loc", "scale", "shape"), c("loc", "scale", "shape"))
   return(val)
 }
+
+##
+
+val[1,1] <- 1/((1+2*shape)*scale^2)
+val[2,2] <- 2/((1+shape)*(1+2*shape))
+val[2,1] <- val[1,2] <-
