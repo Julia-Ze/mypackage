@@ -1,21 +1,18 @@
-#' GEV Distribution Expected Information
+#' GP Distribution Expected Information
 #'
-#' Calculates the expected information matrix for the GEV distribution.
+#' Calculates the expected information matrix for the GP distribution.
 #'
-#' @param scale,shape Numeric vectors. Respective values of the GEV parameters
+#' @param scale,shape Numeric vectors. Respective values of the GP parameters
 #'   scale parameter \eqn{\sigma} and shape parameter \eqn{\xi}. For
-#'   `gevExpInfo`, `scale` and `shape` must have length 1.
+#'   `gpExpInfo`, `scale` and `shape` must have length 1.
 #' @param eps A numeric scalar. For values of \eqn{\xi} in `shape` that lie in
 #'   `(-eps, eps)` an approximation is used instead of a direct calculation.
 #'   See **Details**. If `eps` is a vector then only the first element is used.
-#' @details `gevExpInfo` calculates, for single pair of values
+#' @details `gpExpInfo` calculates, for single pair of values
 #'   \eqn{(\sigma, \xi) = } `(scale, shape)`, the expected information matrix for a
-#'   single observation from a GEV distribution with distribution function
-#'   \deqn{F(x) = P(X \leq x) = \exp\left\{ -\left[ 1+\xi\left(\frac{x-\mu}{\sigma}\right)
-#'   \right]_+^{-1/\xi} \right\},}
-#'   where \eqn{x_+ = \max(x, 0)}.
-#'   The GEV expected information is defined only for \eqn{\xi > -0.5} and does
-#'   not depend on the value of \eqn{\mu}.
+#'   single observation from a GP distribution with distribution function
+#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}}
+#'   The GP expected information is defined only for \eqn{\xi > -0.5}
 #'
 #'   The other functions are vectorized and calculate the individual
 #'   contributions to the expected information matrix. For example, `gev11e`
