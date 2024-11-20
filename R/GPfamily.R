@@ -1,16 +1,16 @@
-#' GEV family distribution for fitting a GAMLSS
+#' GP family distribution for fitting a GAMLSS
 #'
-#' The functions `GEVfisher()` and `GEVquasi()` each define the generalized
-#' extreme value (GEV) family distribution, a three parameter distribution, for
+#' The functions `GPfisher()` and `GPquasi()` each define the generalized
+#' Pareto (GP) family distribution, a two parameter distribution, for
 #' a [`gamlss.dist::gamlss.family()`][`gamlss.dist::gamlss.family`] object to
 #' be used in GAMLSS fitting using the function
 #' [`gamlss::gamlss()`][`gamlss::gamlss`]. The only difference
-#' between `GEVfisher()` and `GEVquasi()` is the form of scoring method used to
+#' between `GPfisher()` and `GPquasi()` is the form of scoring method used to
 #' define the weights used in the fitting algorithm. Fisher's scoring,
-#' based on the expected Fisher information is used in `GEVfisher()`, whereas
+#' based on the expected Fisher information is used in `GPfisher()`, whereas
 #' a quasi-Newton scoring, based on the cross products of the first derivatives
-#' of the log-likelihood, is used in `GEVquasi()`. The functions
-#' `dGEV`, `pGEV`, `qGEV` and `rGEV` define the density, distribution function,
+#' of the log-likelihood, is used in `GPquasi()`. The functions
+#' `dGP`, `pGP`, `qGP` and `rGP` define the density, distribution function,
 #' quantile function and random generation for the specific parameterization of
 #' the generalized extreme value distribution given in **Details** below.
 #'
