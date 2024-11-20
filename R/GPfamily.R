@@ -28,13 +28,11 @@
 #' @param n Number of observations. If `length(n) > 1`, the length is taken to
 #'   be the number required.
 #'
-#' @details The distribution function of a GEV distribution with parameters
-#'  \code{loc} = \eqn{\mu}, \code{scale} = \eqn{\sigma (> 0)} and
-#'  \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
-#'   \deqn{F(x) = P(X \leq x) = \exp\left\{ -\left[ 1+\xi\left(\frac{x-\mu}{\sigma}\right)
-#'   \right]_+^{-1/\xi} \right\},}
-#'   where \eqn{x_+ = \max(x, 0)}. If \eqn{\xi = 0} the
-#'  distribution function is defined as the limit as \eqn{\xi} tends to zero.
+#' @details The distribution function of a GP distribution with parameters
+#'  \code{scale} = \eqn{\sigma (> 0)} and \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
+#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}}.
+#'  If \eqn{\xi = 0} the distribution function is defined as the limit as
+#'  \eqn{\xi} tends to zero.
 #'  The support of the distribution depends on \eqn{\xi}: it is
 #'  \eqn{x \leq \mu - \sigma / \xi}{x <= \mu - \sigma / \xi} for \eqn{\xi < 0};
 #'  \eqn{x \geq \mu - \sigma / \xi}{x >= \mu - \sigma / \xi} for \eqn{\xi > 0};
