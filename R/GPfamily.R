@@ -14,14 +14,12 @@
 #' quantile function and random generation for the specific parameterization of
 #' the generalized extreme value distribution given in **Details** below.
 #'
-#' @param mu.link Defines the `mu.link`, with `"identity"` link as the default
-#' for the `mu` parameter.
 #' @param sigma.link Defines the `sigma.link`, with `"log"` link as the default
 #' for the `sigma` parameter.
 #' @param nu.link Defines the `nu.link`, with `"identity"` link as the default
 #' for the `nu` parameter.
 #' @param x,q Vector of quantiles.
-#' @param mu,sigma,nu Vectors of location, scale and shape parameter values.
+#' @param sigma,nu Vectors of scale and shape parameter values.
 #' @param log,log.p Logical. If `TRUE`, probabilities `eqn{p}` are given as
 #'   \eqn{\log(p)}.
 #' @param lower.tail Logical. If `TRUE` (the default), probabilities are
