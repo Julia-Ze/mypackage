@@ -16,10 +16,9 @@
 #'   \frac{1}{1 + \xi} & \frac{2}{1 + \xi}
 #'   \end{bmatrix}}
 #'
-#' @returns `gevExpInfo` returns a 3 by 3 numeric matrix with row and column
-#'   named `loc, scale, shape`. The other functions return a numeric vector of
-#'   length equal to the maximum of the lengths of the arguments, excluding
-#'   `eps`.
+#' @returns `gpExpInfo` returns a 2 by 2 numeric matrix with row and column
+#'   named `scale, shape`.
+#'
 #' @examples
 #' # Expected information matrices for ...
 #' # ... scale = 1 and shape = 0.1
