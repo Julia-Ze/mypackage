@@ -10,24 +10,12 @@
 #'   single observation from a GP distribution with distribution function
 #'   \deqn{F(x) = P(X \leq x) = 1 - \left[ 1 + \frac{\xi x}{\sigma} \right]_+^{-1/\xi}}
 #'
-#'   The other functions are vectorized and calculate the individual
-#'   contributions to the expected information matrix. For example, `gev11e`
-#'   calculates the expectation \eqn{i_{\mu\mu}} of the negated second
-#'   derivative of the GEV log-density with respect to \eqn{\mu}, that is, each
-#'   `1` indicates one derivative with respect to \eqn{\mu}. Similarly, `2`
-#'   denotes one derivative with respect to \eqn{\sigma} and `3` one derivative
-#'   with respect to \eqn{\xi}, so that, for example, `gev23e` calculates the
-#'   expectation \eqn{i_{\sigma\xi}} of the negated GEV log-density after one
-#'   taking one derivative with respect to \eqn{\sigma} and one derivative with
-#'   respect to \eqn{\xi}. Note that \eqn{i_{\xi\xi}}, calculated using
-#'   `gev33e`, depends only on \eqn{\xi}.
+#'   The matrix is of the form
+#'   \deqn{\mathbf{I} = \frac{1}{\sigma (1 + 2 \xi)} \begin{bmatrix}
+#'   \frac{1}{\sigma} & \frac{1}{1 + \xi} \\
+#'   \frac{1}{1 + \xi} & \frac{2}{1 + \xi}
+#'   \end{bmatrix}}
 #'
-#'   The expectation in `gev11e` can be calculated in a direct way for all
-#'   \eqn{\xi > -0.5}. For the other components, direct calculation of the
-#'   expectation is unstable when \eqn{\xi} is close to 0. Instead, we use
-#'   a quadratic approximation over `(-eps, eps)`, from a Lagrangian
-#'   interpolation of the values from the direct calculation for \eqn{\xi = }
-#'   `-eps`, \eqn{0} and `eps`.
 #' @returns `gevExpInfo` returns a 3 by 3 numeric matrix with row and column
 #'   named `loc, scale, shape`. The other functions return a numeric vector of
 #'   length equal to the maximum of the lengths of the arguments, excluding
