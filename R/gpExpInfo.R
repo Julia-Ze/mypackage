@@ -5,10 +5,10 @@
 #' @param scale,shape Numeric vectors. Respective values of the GP parameters
 #'   scale parameter \eqn{\sigma} and shape parameter \eqn{\xi}. For
 #'   `gpExpInfo`, `scale` and `shape` must have length 1.
-#' @details `gpExpInfo` calculates, for single pair of values
+#' @details `gpExpInfo` calculates, for a single pair of values
 #'   \eqn{(\sigma, \xi) = } `(scale, shape)`, the expected information matrix for a
 #'   single observation from a GP distribution with distribution function
-#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}}
+#'   \deqn{F(x) = P(X \leq x) = 1 - \left[ 1 + \frac{\xi x}{\sigma} \right]_+^{-1/\xi}}
 #'
 #'   The other functions are vectorized and calculate the individual
 #'   contributions to the expected information matrix. For example, `gev11e`
