@@ -87,46 +87,34 @@ GPfisher <- function(sigma.link = "log",
          nu.linkinv = vstats$linkinv,
          sigma.dr = dstats$mu.eta,
          nu.dr = vstats$mu.eta,
-         dldm = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
-                             log = TRUE, deriv = TRUE)
-           dldm <- attr(dl, "gradient")[, "loc"]
-           return(dldm)
-         },
-         d2ldm2 = function(y, mu, sigma, nu) {
-           dldm2 <- -gev11e(scale = sigma, shape = nu)
-           return(dldm2)
-         },
-         dldd = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         dldd = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldd <- attr(dl, "gradient")[, "scale"]
            return(dldd)
          },
-         d2ldd2 = function(y, mu, sigma, nu) {
-           dldd2 <- -gev22e(scale = sigma, shape = nu)
+         d2ldd2 = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
+                              log = TRUE, hessian = TRUE)
+           dldd2 <- attr(dl, "hessian")[, "scale", "scale"]
            return(dldd2)
          },
-         dldv = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         dldv = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldv <- attr(dl, "gradient")[, "shape"]
            return(dldv)
          },
          d2ldv2 = function(y, mu, sigma, nu) {
-           dldv2 <- -gev33e(shape = nu)
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
+                              log = TRUE, hessian = TRUE)
+           dldd2 <- attr(dl, "hessian")[, "scale", "shape"]
            return(dldv2)
          },
-         d2ldmdd = function(y, mu, sigma, nu) {
-           dldmdd <- -gev12e(scale = sigma, shape = nu)
-           return(dldmdd)
-         },
-         d2ldmdv = function(y, mu, sigma, nu) {
-           dldmdv <- -gev13e(scale = sigma, shape = nu)
-           return(dldmdv)
-         },
          d2ldddv = function(y, mu, sigma, nu) {
-           dldddv <- -gev23e(scale = sigma, shape = nu)
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
+                              log = TRUE, hessian = TRUE)
+           dldd2 <- attr(dl, "hessian")[, "shape", "shape"]
            return(dldddv)
          },
          G.dev.incr = function(y, mu, sigma, nu,...) {
