@@ -142,90 +142,55 @@ GPfisher <- function(sigma.link = "log",
 
 #' @rdname GP
 #' @export
-GEVquasi <- function(mu.link = "identity", sigma.link = "log",
+GPquasi <- function(sigma.link = "log",
                      nu.link = "identity") {
 
-  mstats <- gamlss.dist::checklink("mu.link", "GEV", substitute(mu.link),
-                                   c("1/mu^2", "log", "identity"))
-  dstats <- gamlss.dist::checklink("sigma.link", "GEV", substitute(sigma.link),
+  dstats <- gamlss.dist::checklink("sigma.link", "GP", substitute(sigma.link),
                                    c("inverse", "log", "identity"))
-  vstats <- gamlss.dist::checklink("nu.link", "GEV",substitute(nu.link),
+  vstats <- gamlss.dist::checklink("nu.link", "GP",substitute(nu.link),
                                    c("inverse", "log", "identity"))
 
   structure(
-    list(family = c("GEV", "Generalized Extreme Value"),
-         parameters = list(mu = TRUE, sigma = TRUE, nu = TRUE),
-         nopar = 3,
+    list(family = c("GP", "Generalized Pareto"),
+         parameters = list(sigma = TRUE, nu = TRUE),
+         nopar = 2,
          type = "Continuous",
-         mu.link = as.character(substitute(mu.link)),
          sigma.link = as.character(substitute(sigma.link)),
          nu.link = as.character(substitute(nu.link)),
-         mu.linkfun = mstats$linkfun,
          sigma.linkfun = dstats$linkfun,
          nu.linkfun = vstats$linkfun,
-         mu.linkinv = mstats$linkinv,
          sigma.linkinv = dstats$linkinv,
          nu.linkinv = vstats$linkinv,
-         mu.dr = mstats$mu.eta,
          sigma.dr = dstats$mu.eta,
          nu.dr = vstats$mu.eta,
-         dldm = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
-                             log = TRUE, deriv = TRUE)
-           dldm <- attr(dl, "gradient")[, "loc"]
-           return(dldm)
-         },
-         d2ldm2 = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
-                             log = TRUE, deriv = TRUE)
-           dldm <- attr(dl, "gradient")[, "loc"]
-           dldm2 <- -dldm * dldm
-           return(dldm2)
-         },
-         dldd = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         dldd = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldd <- attr(dl, "gradient")[, "scale"]
            return(dldd)
          },
-         d2ldd2 = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         d2ldd2 = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldd <- attr(dl, "gradient")[, "scale"]
            dldd2 <- -dldd * dldd
            return(dldd2)
          },
-         dldv = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         dldv = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldv <- attr(dl, "gradient")[, "shape"]
            return(dldv)
          },
-         d2ldv2 = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         d2ldv2 = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldv <- attr(dl, "gradient")[, "shape"]
            dldv2 <- -dldv * dldv
            return(dldv2)
          },
-         d2ldmdd = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
-                             log = TRUE, deriv = TRUE)
-           dldm <- attr(dl, "gradient")[, "loc"]
-           dldd <- attr(dl, "gradient")[, "scale"]
-           dldmdd <- -dldm * dldd
-           return(dldmdd)
-         },
-         d2ldmdv = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
-                             log = TRUE, deriv = TRUE)
-           dldm <- attr(dl, "gradient")[, "loc"]
-           dldv <- attr(dl, "gradient")[, "shape"]
-           dldmdv <- -dldm * dldv
-           return(dldmdv)
-         },
-         d2ldddv = function(y, mu, sigma, nu) {
-           dl <- nieve::dGEV(x = y, loc = mu, scale = sigma, shape = nu,
+         d2ldddv = function(y, sigma, nu) {
+           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
                              log = TRUE, deriv = TRUE)
            dldd <- attr(dl, "gradient")[, "scale"]
            dldv <- attr(dl, "gradient")[, "shape"]
