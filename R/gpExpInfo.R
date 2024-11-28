@@ -9,6 +9,7 @@
 #'   \eqn{(\sigma, \xi) = } `(scale, shape)`, the expected information matrix for a
 #'   single observation from a GP distribution with distribution function
 #'   \deqn{F(x) = P(X \leq x) = 1 - \left[ 1 + \frac{\xi x}{\sigma} \right]_+^{-1/\xi}}
+#'   The GP expected information is defined only for \eqn{\xi > -0.5}
 #'
 #'   The matrix is of the form
 #'   \deqn{\mathbf{I} = \frac{1}{\sigma (1 + 2 \xi)} \begin{bmatrix}
