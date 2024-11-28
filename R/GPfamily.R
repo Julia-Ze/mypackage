@@ -30,7 +30,7 @@
 #'
 #' @details The distribution function of a GP distribution with parameters
 #'  \code{scale} = \eqn{\sigma (> 0)} and \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
-#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}}.
+#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}.}
 #'  If \eqn{\xi = 0} the distribution function is defined as the limit as
 #'  \eqn{\xi} tends to zero.
 #'  The support of the distribution depends on \eqn{\xi}: it is
@@ -45,26 +45,26 @@
 #' imposed, which is necessary for the usual asymptotic likelihood theory to be
 #' applicable.
 #'
-#' @return `GEVfisher()` and `GEVquasi()` each return a
+#' @return `GPfisher()` and `GPquasi()` each return a
 #'   [`gamlss.dist::gamlss.family()`][`gamlss.dist::gamlss.family`] object
-#'   which can be used to fit a regression model with a GEV response
+#'   which can be used to fit a regression model with a GP response
 #'   distribution using the
-#'   [`gamlss::gamlss()`][`gamlss::gamlss`] function. `dGEV()` gives the density,
-#'   `pGEV()` gives the distribution function, `qGEV()` gives the quantile
-#'   function, and `rGEV()` generates random deviates.
-#' @seealso [`fitGEV`],
+#'   [`gamlss::gamlss()`][`gamlss::gamlss`] function. `dGP()` gives the density,
+#'   `pGP()` gives the distribution function, `qGP()` gives the quantile
+#'   function, and `rGP()` generates random deviates.
+#' @seealso [`fitGP`],
 #'   [`gamlss.dist::gamlss.family()`][`gamlss.dist::gamlss.family`],
 #'   [`gamlss::gamlss()`][`gamlss::gamlss`]
 #' @references Coles, S. G. (2001) *An Introduction to Statistical
 #'   Modeling of Extreme Values*, Springer-Verlag, London.
 #'   Chapter 3: \doi{10.1007/978-1-4471-3675-0_3}
 #' @section Examples:
-#' See the examples in [`fitGEV()`].
-#' @name GEV
+#' See the examples in [`fitGP`].
+#' @name GP
 NULL
 ## NULL
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 GEVfisher <- function(mu.link = "identity", sigma.link = "log",
                       nu.link = "identity") {
@@ -158,7 +158,7 @@ GEVfisher <- function(mu.link = "identity", sigma.link = "log",
   )
 }
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 GEVquasi <- function(mu.link = "identity", sigma.link = "log",
                      nu.link = "identity") {
@@ -268,28 +268,28 @@ GEVquasi <- function(mu.link = "identity", sigma.link = "log",
   )
 }
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 dGEV <- function(x, mu = 0, sigma = 1, nu = 0, log = FALSE) {
   return(nieve::dGEV(x = x, loc = mu, scale = sigma, shape = nu,
                      log = log))
 }
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 pGEV <- function(q, mu = 0, sigma = 1, nu = 0, lower.tail = TRUE,
                  log.p = FALSE) {
   return(nieve::pGEV(q = q, loc = mu, scale = sigma, shape = nu))
 }
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 qGEV <- function(p, mu = 0, sigma = 1, nu = 0, lower.tail = TRUE,
                  log.p = FALSE) {
   return(nieve::qGEV(p = p, loc = mu, scale = sigma, shape = nu))
 }
 
-#' @rdname GEV
+#' @rdname GP
 #' @export
 rGEV <- function(n, mu = 0, sigma = 1, nu = 0) {
   return(nieve::rGEV(n = n, loc = mu, scale = sigma, shape = nu))
