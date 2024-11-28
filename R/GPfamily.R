@@ -252,27 +252,27 @@ GEVquasi <- function(mu.link = "identity", sigma.link = "log",
 
 #' @rdname GP
 #' @export
-dGEV <- function(x, mu = 0, sigma = 1, nu = 0, log = FALSE) {
-  return(nieve::dGEV(x = x, loc = mu, scale = sigma, shape = nu,
+dGP <- function(x, sigma = 1, nu = 0, log = FALSE) {
+  return(nieve::dGPD2(x = x, scale = sigma, shape = nu,
                      log = log))
 }
 
 #' @rdname GP
 #' @export
-pGEV <- function(q, mu = 0, sigma = 1, nu = 0, lower.tail = TRUE,
+pGP <- function(q, sigma = 1, nu = 0, lower.tail = TRUE,
                  log.p = FALSE) {
-  return(nieve::pGEV(q = q, loc = mu, scale = sigma, shape = nu))
+  return(nieve::pGPD2(q = q, scale = sigma, shape = nu))
 }
 
 #' @rdname GP
 #' @export
-qGEV <- function(p, mu = 0, sigma = 1, nu = 0, lower.tail = TRUE,
+qGP <- function(p, sigma = 1, nu = 0, lower.tail = TRUE,
                  log.p = FALSE) {
-  return(nieve::qGEV(p = p, loc = mu, scale = sigma, shape = nu))
+  return(nieve::qGPD2(p = p, scale = sigma, shape = nu))
 }
 
 #' @rdname GP
 #' @export
-rGEV <- function(n, mu = 0, sigma = 1, nu = 0) {
-  return(nieve::rGEV(n = n, loc = mu, scale = sigma, shape = nu))
+rGP <- function(n, sigma = 1, nu = 0) {
+  return(nieve::rGPD2(n = n, scale = sigma, shape = nu))
 }
