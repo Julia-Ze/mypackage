@@ -66,31 +66,25 @@ NULL
 
 #' @rdname GP
 #' @export
-GEVfisher <- function(mu.link = "identity", sigma.link = "log",
+GPfisher <- function(sigma.link = "log",
                       nu.link = "identity") {
 
-  mstats <- gamlss.dist::checklink("mu.link", "GEV", substitute(mu.link),
-                                   c("1/mu^2", "log", "identity"))
-  dstats <- gamlss.dist::checklink("sigma.link", "GEV", substitute(sigma.link),
+  dstats <- gamlss.dist::checklink("sigma.link", "GP", substitute(sigma.link),
                                    c("inverse", "log", "identity"))
-  vstats <- gamlss.dist::checklink("nu.link", "GEV",substitute(nu.link),
+  vstats <- gamlss.dist::checklink("nu.link", "GP",substitute(nu.link),
                                    c("inverse", "log", "identity"))
 
   structure(
-    list(family = c("GEV", "Generalized Extreme Value"),
-         parameters = list(mu = TRUE, sigma = TRUE, nu = TRUE),
-         nopar = 3,
+    list(family = c("GP", "Generalized Pareto"),
+         parameters = list(sigma = TRUE, nu = TRUE),
+         nopar = 2,
          type = "Continuous",
-         mu.link = as.character(substitute(mu.link)),
          sigma.link = as.character(substitute(sigma.link)),
          nu.link = as.character(substitute(nu.link)),
-         mu.linkfun = mstats$linkfun,
          sigma.linkfun = dstats$linkfun,
          nu.linkfun = vstats$linkfun,
-         mu.linkinv = mstats$linkinv,
          sigma.linkinv = dstats$linkinv,
          nu.linkinv = vstats$linkinv,
-         mu.dr = mstats$mu.eta,
          sigma.dr = dstats$mu.eta,
          nu.dr = vstats$mu.eta,
          dldm = function(y, mu, sigma, nu) {
