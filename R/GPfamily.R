@@ -31,15 +31,15 @@
 #' @details The distribution function of a GP distribution with parameters
 #'  \code{scale} = \eqn{\sigma (> 0)} and \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
 #'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}.}
-#'  If \eqn{\xi = 0} the distribution function is defined as the limit as
-#'  \eqn{\xi} tends to zero.
+#'  If \eqn{\xi = 0} the Generalized Pareto distribution is equivalent to an
+#'  Exponential distribution with parameter \eqn{1/\sigma}.
+#'
 #'  The support of the distribution depends on \eqn{\xi}: it is
-#'  \eqn{x \leq \mu - \sigma / \xi}{x <= \mu - \sigma / \xi} for \eqn{\xi < 0};
-#'  \eqn{x \geq \mu - \sigma / \xi}{x >= \mu - \sigma / \xi} for \eqn{\xi > 0};
-#'  and \eqn{x} is unbounded for \eqn{\xi = 0}.
+#'  \eqn{x \geq 0}{x >= 0} for \eqn{\xi \geq 0};
+#'  \eqn{0 \leq x \leq - \sigma / \xi}{0 <= x <= - \sigma / \xi} for \eqn{\xi < 0}{\xi < 0}.
 #'  See
-#'  \url{https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution}
-#'  and/or Chapter 3 of Coles (2001) for further information.
+#'  \url{https://en.wikipedia.org/wiki/Generalized_Pareto_distribution}
+#'  and/or Chapter 4 of Coles (2001) for further information.
 #'
 #' For each observation in the data, the restriction that \eqn{\xi > -1/2} is
 #' imposed, which is necessary for the usual asymptotic likelihood theory to be
@@ -57,7 +57,7 @@
 #'   [`gamlss::gamlss()`][`gamlss::gamlss`]
 #' @references Coles, S. G. (2001) *An Introduction to Statistical
 #'   Modeling of Extreme Values*, Springer-Verlag, London.
-#'   Chapter 3: \doi{10.1007/978-1-4471-3675-0_3}
+#'   Chapter 4: \doi{10.1007/978-1-4471-3675-0_4}
 #' @section Examples:
 #' See the examples in [`fitGP`].
 #' @name GP
@@ -94,10 +94,9 @@ GPfisher <- function(sigma.link = "log",
            return(dldd)
          },
          d2ldd2 = function(y, sigma, nu) {
-           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
-                              log = TRUE, hessian = TRUE)
-           dldd2 <- attr(dl, "hessian")[, "scale", "scale"]
-           return(dldd2)
+           val <- -gpExpInfo(scale = sigma, shape = nu)[1, 1]
+           m <- max(length(scale), length(shape))
+           return(rep_len(val, m))
          },
          dldv = function(y, sigma, nu) {
            dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
@@ -106,32 +105,23 @@ GPfisher <- function(sigma.link = "log",
            return(dldv)
          },
          d2ldv2 = function(y, mu, sigma, nu) {
-           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
-                              log = TRUE, hessian = TRUE)
-           dldd2 <- attr(dl, "hessian")[, "scale", "shape"]
-           return(dldv2)
+           val <- -gpExpInfo(scale = sigma, shape = nu)[2, 2]
+           m <- max(length(scale), length(shape))
+           return(rep_len(val, m))
          },
          d2ldddv = function(y, mu, sigma, nu) {
-           dl <- nieve::dGPD2(x = y, scale = sigma, shape = nu,
-                              log = TRUE, hessian = TRUE)
-           dldd2 <- attr(dl, "hessian")[, "shape", "shape"]
-           return(dldddv)
+           val <- -gpExpInfo(scale = sigma, shape = nu)[1, 2]
+           m <- max(length(scale), length(shape))
+           return(rep_len(val, m))
          },
-         G.dev.incr = function(y, mu, sigma, nu,...) {
-           val <- -2 * dGEV(x = y, mu = mu, sigma = sigma, nu = nu, log = TRUE)
+         G.dev.incr = function(y, sigma, nu,...) {
+           val <- -2 * dGP(x = y, sigma = sigma, nu = nu, log = TRUE)
            return(val)
          },
-         rqres = expression(rqres(pfun = "pGEV", type = "Continuous",
-                                  y = y, mu = mu, sigma = sigma, nu = nu)),
-         # sqrt(6) / pi is approximately 0.78
-         # 0.57722 * sqrt(6) / pi is approximately 0.45
-         # The gamlss.dist::RGE() code had a typo in mu.initial + 0.45 should be - 0.45
-         # The next (commented out) line starts from a crude stationary fit
-         #         mu.initial = expression(mu <- rep(mean(y) - 0.45 * sd(y), length(y))),
-         mu.initial = expression(mu <- y - 0.45 * sd(y)),
-         sigma.initial = expression(sigma <- rep(0.78 * sd(y), length(y))),
-         nu.initial = expression(nu <- rep(0.1, length(y))),
-         mu.valid = function(mu) TRUE,
+         rqres = expression(rqres(pfun = "pGP", type = "Continuous",
+                                  y = y, sigma = sigma, nu = nu)),
+         sigma.initial = expression(sigma <- rep(mean(y), length(y))),
+         nu.initial = expression(nu <- rep(0, length(y))),
          sigma.valid = function(sigma) all(sigma > 0),
          nu.valid = function(nu) all(nu > -0.5),
          y.valid = function(y) TRUE
@@ -197,16 +187,14 @@ GPquasi <- function(sigma.link = "log",
            dldddv <- -dldd * dldv
            return(dldddv)
          },
-         G.dev.incr = function(y, mu, sigma, nu,...) {
-           val <- -2 * dGEV(x = y, mu = mu, sigma = sigma, nu = nu, log = TRUE)
+         G.dev.incr = function(y, sigma, nu,...) {
+           val <- -2 * dGP(x = y, sigma = sigma, nu = nu, log = TRUE)
            return(val)
          },
-         rqres = expression(rqres(pfun = "pGEV", type = "Continuous",
-                                  y = y, mu = mu, sigma = sigma, nu = nu)),
-         mu.initial = expression(mu <- y + 0.45 * sd(y)),
-         sigma.initial = expression(sigma <- rep(0.78 * sd(y), length(y))),
-         nu.initial = expression(nu <- rep(0.1, length(y))),
-         mu.valid = function(mu) TRUE,
+         rqres = expression(rqres(pfun = "pGP", type = "Continuous",
+                                  y = y, sigma = sigma, nu = nu)),
+         sigma.initial = expression(sigma <- rep(mean(y), length(y))),
+         nu.initial = expression(nu <- rep(0, length(y))),
          sigma.valid = function(sigma) all(sigma > 0),
          nu.valid = function(nu) all(nu > -0.5),
          y.valid = function(y) TRUE
