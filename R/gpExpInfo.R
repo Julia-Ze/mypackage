@@ -13,9 +13,9 @@
 #'   The GP expected information is defined only for \eqn{\xi > -0.5}.
 #'
 #'   The matrix is of the form
-#'   \deqn{\mathbf{I} = \displaystyle\frac{1}{\sigma (1 + 2 \xi)} \begin{bmatrix}
-#'   \displaystyle\frac{1}{\sigma} & \displaystyle\frac{1}{1 + \xi} \\
-#'   \displaystyle\frac{1}{1 + \xi} & \displaystyle\frac{2}{1 + \xi}
+#'   \deqn{\mathbf{I} = \displaystyle\frac{1}{1 + 2 \xi} \begin{bmatrix}
+#'   \displaystyle\frac{1}{\sigma^2} & \displaystyle\frac{1}{\sigma (1 + \xi)} \\
+#'   \displaystyle\frac{1}{\sigma (1 + \xi)} & \displaystyle\frac{2}{1 + \xi}
 #'   \end{bmatrix}.}
 #'
 #' @returns `gpExpInfo` returns a 2 by 2 numeric matrix with row and column
