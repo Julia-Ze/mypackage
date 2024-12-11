@@ -1,7 +1,7 @@
-#' Fit a Generalized Extreme value (GEV) GAMLSS Model
+#' Fit a Generalized Pareto (GP) GAMLSS Model
 #'
 #' Fits a Generalized Additive Model (GAM) for Location, Scale and Shape with
-#' a GEV response distribution, using the function
+#' a GP response distribution, using the function
 #' [`gamlss::gamlss()`][`gamlss::gamlss`].
 #'
 #' @inheritParams gamlss::gamlss
@@ -12,20 +12,20 @@
 #'   If `scoring = "quasi"` then these weights are based on the cross products
 #'   of the first derivatives of the log-likelihood, leading to a quasi Newton
 #'   scoring algorithm.
-#' @param mu.link,sigma.link,xi.link Character scalars to set the respective
-#'   link functions for the location (`mu`), scale (`sigma`) and shape (`xi`)
+#' @param sigma.link,xi.link Character scalars to set the respective
+#'   link functions for the scale (`sigma`) and shape (`xi`)
 #'   parameters. The latter is passed to [`gamlss::gamlss()`][`gamlss::gamlss`]
 #'   as `nu.link`.
 #' @param stepLength A numeric vector of positive values. The initial
-#'    values of the step lengths `mu.step`, `sigma.step` and `nu.step` passed to
+#'    values of the step lengths `sigma.step` and `nu.step` passed to
 #'   [`gamlss::gamlss.control()`][`gamlss::gamlss.control`] in the first attempt
 #'   to fit the model by calling [`gamlss::gamlss()`][`gamlss::gamlss`]. If
-#'   `stepLength` has a length that is less than 3 then `stepLength` is
-#'   recycled to have length 3.
+#'   `stepLength` has a length that is less than 2 then `stepLength` is
+#'   recycled to have length 2.
 #' @param stepAttempts A non-negative integer. If the first call to
 #'   [`gamlss::gamlss()`][`gamlss::gamlss`] throws an error then we make
 #'   `stepAttempts` further attempts to fit the model, each time dividing by 2
-#'   the values of `mu.step`, `sigma.step` and `nu.step` supplied to
+#'   the values of `sigma.step` and `nu.step` supplied to
 #'   [`gamlss::gamlss.control()`][`gamlss::gamlss.control`]. If
 #'   `stepAttempts < 1` then no further attempts are made.
 #' @param stepReduce A number greater than 1. The factor by which the step
@@ -40,7 +40,7 @@
 #'   the fitting algorithm, with options `RS()`, `CG()` or `mixed()`. The
 #'   default, `method = RS()` seems to work well, as does `method = mixed()`.
 #'   In contrast, `method = CG()` often requires the step length to be reduced
-#'   before convergence is achieved. `fitGEV()` attempts to do this
+#'   before convergence is achieved. `fitGP()` attempts to do this
 #'   automatically. See `stepAttempts`. Pass `trace = FALSE`
 #'   (to [`gamlss::gamlss.control()`][`gamlss::gamlss.control`]) to avoid
 #'   writing to the console the global deviance after each outer iteration of
