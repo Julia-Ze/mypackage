@@ -104,12 +104,12 @@ GPfisher <- function(sigma.link = "log",
            dldv <- attr(dl, "gradient")[, "shape"]
            return(dldv)
          },
-         d2ldv2 = function(y, mu, sigma, nu) {
+         d2ldv2 = function(y, sigma, nu) {
            val <- -gpExpInfo(scale = sigma, shape = nu)[2, 2]
            m <- max(length(scale), length(shape))
            return(rep_len(val, m))
          },
-         d2ldddv = function(y, mu, sigma, nu) {
+         d2ldddv = function(y, sigma, nu) {
            val <- -gpExpInfo(scale = sigma, shape = nu)[1, 2]
            m <- max(length(scale), length(shape))
            return(rep_len(val, m))
