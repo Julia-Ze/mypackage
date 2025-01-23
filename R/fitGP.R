@@ -92,6 +92,7 @@
 #' # Use steps = TRUE to write the step lengths to the console
 #' # The CG algorithm needs a lot of iterations to converge in this case
 #' mod <- fitGP(y ~ pb(x), data = data, method = CG(150), steps = TRUE)
+#' @import gamlss
 #' @export
 fitGP <- function(formula, data, scoring = c("fisher", "quasi"),
                   sigma.link = "log", xi.link = "identity",

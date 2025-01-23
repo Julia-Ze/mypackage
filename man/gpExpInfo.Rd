@@ -2,8 +2,17 @@
 % Please edit documentation in R/gpExpInfo.R
 \name{gpExpInfo}
 \alias{gpExpInfo}
+\alias{gp11e}
+\alias{gp22e}
+\alias{gp12e}
 \title{GP Distribution Expected Information}
 \usage{
+gp11e(scale, shape)
+
+gp22e(scale, shape)
+
+gp12e(scale, shape)
+
 gpExpInfo(scale, shape)
 }
 \arguments{
@@ -13,7 +22,8 @@ scale parameter \eqn{\sigma} and shape parameter \eqn{\xi}. For
 }
 \value{
 \code{gpExpInfo} returns a 2 by 2 numeric matrix with row and column
-named \verb{scale, shape}.
+named \verb{scale, shape}. The other functions return a numeric vector of
+length equal to the maximum of the lengths of the arguments.
 }
 \description{
 Calculates the expected information matrix for the GP distribution.
@@ -31,9 +41,25 @@ The matrix is of the form
   \displaystyle\frac{1}{\sigma^2} & \displaystyle\frac{1}{\sigma (1 + \xi)} \\
   \displaystyle\frac{1}{\sigma (1 + \xi)} & \displaystyle\frac{2}{1 + \xi}
   \end{bmatrix}.}
+
+The other functions are vectorized and calculate the individual
+contributions to the expected information matrix. For example, \code{gp11e}
+calculates the expectation \eqn{i_{\sigma\sigma}} of the negated second
+derivative of the GP log-density with respect to \eqn{\sigma}, that is,
+each \code{1} indicates one derivative with respect to \eqn{\sigma}. Similarly,
+\code{2} denotes one derivative with respect to \eqn{\xi}, so that, \code{gp12e}
+calculates the expectation \eqn{i_{\sigma\xi}} of the negated GP
+log-density after one taking one derivative with respect to \eqn{\sigma}
+and one derivative with respect to \eqn{\xi}.
 }
 \examples{
 # Expected information matrices for ...
 # ... scale = 1 and shape = 0.1
 gpExpInfo(1, 0.1)
+
+# The individual components of this matrix
+gp11e(1, 0.1)
+gp12e(1, 0.1)
+gp22e(1, 0.1)
+
 }
