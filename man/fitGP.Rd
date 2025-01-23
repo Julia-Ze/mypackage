@@ -93,18 +93,17 @@ library(gamlss)
 
 ##### Simulated data
 
-set.seed(17012023)
+set.seed(512024)
 n <- 100
 x <- stats::runif(n)
-mu <- 1 + 2 * x
-sigma <- 1
-xi <- 0.25
-y <- nieve::rGEV(n = 1, loc = mu, scale = sigma, shape = xi)
+sigma <- 1 + 2 * x
+xi <- 0.1
+y <- nieve::rGPD2(n = 1, scale = sigma, shape = xi)
 data <- data.frame(y = as.numeric(y), x = x)
 plot(x, y)
 
 # Fit model using the default RS method with Fisher's scoring
-mod <- fitGEV(y ~ gamlss::pb(x), data = data)
+mod <- fitGP(y ~ pb(x), data = data)
 # Summary of model fit
 summary(mod)
 # Residual diagnostic plots
@@ -115,42 +114,18 @@ lines(data$x, fitted(mod))
 
 # Fit model using the mixed method and quasi-Newton scoring
 # Use trace = FALSE to prevent writing the global deviance to the console
-mod <- fitGEV(y ~ pb(x), data = data, method = mixed(), scoring = "quasi",
-              trace = FALSE)
+mod <- fitGP(y ~ pb(x), data = data, method = mixed(), scoring = "quasi",
+             trace = FALSE)
+# With the default method = mixed(2, 10): "Algorithm CG has not yet converged"
+# Increasing the iterations of the RS and/or CG method from can avoid this
+mod <- fitGP(y ~ pb(x), data = data, method = mixed(4, 30), scoring = "quasi",
+             trace = FALSE)
 
 # Fit model using the CG method
 # The default step length of 1 needs to be reduced to enable convergence
 # Use steps = TRUE to write the step lengths to the console
-mod <- fitGEV(y ~ pb(x), data = data, method = CG(), steps = TRUE)
-
-##### Fremantle annual maximum sea levels
-##### See also the gamlssx package README file
-
-# Transform Year so that it is centred on 0
-fremantle <- transform(fremantle, cYear = Year - median(Year))
-
-# Plot sea level against year and against SOI
-plot(fremantle$Year, fremantle$SeaLevel, xlab = "year", ylab = "sea level (m)")
-plot(fremantle$SOI, fremantle$SeaLevel, xlab = "SOI", ylab = "sea level (m)")
-
-# Fit a model with P-spline effects of cYear and SOI on location and scale
-# The default links are identity for location and log for scale
-mod <- fitGEV(SeaLevel ~ pb(cYear) + pb(SOI),
-             sigma.formula = ~ pb(cYear) + pb(SOI),
-             data = fremantle)
-
-# Summary of model fit
-summary(mod)
-# Model diagnostic plots
-plot(mod)
-# Worm plot
-wp(mod)
-# Plot of the fitted component smooth functions
-# Note: gamlss::term.plot() does not include uncertainty about the intercept
-# Location mu
-term.plot(mod, rug = TRUE, pages = 1)
-# Scale sigma
-term.plot(mod, what = "sigma", rug = TRUE, pages = 1)
+# The CG algorithm needs a lot of iterations to converge in this case
+mod <- fitGP(y ~ pb(x), data = data, method = CG(150), steps = TRUE)
 }
 \seealso{
 \code{\link{GP}},
