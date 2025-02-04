@@ -28,15 +28,19 @@
 #' @param n Number of observations. If `length(n) > 1`, the length is taken to
 #'   be the number required.
 #'
-#' @details The distribution function of a GP distribution with parameters
-#'  \code{scale} = \eqn{\mu (> 0)} and \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
-#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\mu} \right)^{-1/\xi}.}
+#' @details For the purposes of using the gamlss package, the two parameters need to
+#' be called \eqn{\mu} and \eqn{\sigma} for scale and shape respectively.
+#' However, in mathematical notation the standard \eqn{\sigma} and \eqn{\xi} notation will be used.
+#'
+#' The distribution function of a GP distribution with parameters
+#'  \code{scale} = \eqn{\sigma (> 0)} and \code{shape} = \eqn{\xi} (\eqn{= \nu}) is
+#'   \deqn{F(x) = P(X \leq x) = 1 - \left( 1 + \frac{\xi x}{\sigma} \right)^{-1/\xi}.}
 #'  If \eqn{\xi = 0} the Generalized Pareto distribution is equivalent to an
 #'  Exponential distribution with parameter \eqn{1/\mu}.
 #'
 #'  The support of the distribution depends on \eqn{\xi}: it is
 #'  \eqn{x \geq 0}{x >= 0} for \eqn{\xi \geq 0};
-#'  \eqn{0 \leq x \leq - \mu / \xi}{0 <= x <= - \mu / \xi} for \eqn{\xi < 0}{\xi < 0}.
+#'  \eqn{0 \leq x \leq - \sigma / \xi}{0 <= x <= - \sigma / \xi} for \eqn{\xi < 0}{\xi < 0}.
 #'  See
 #'  \url{https://en.wikipedia.org/wiki/Generalized_Pareto_distribution}
 #'  and/or Chapter 4 of Coles (2001) for further information.
