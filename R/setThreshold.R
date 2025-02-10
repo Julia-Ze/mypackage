@@ -1,14 +1,16 @@
 #' Fit a flexible (?) threshold ...?
 #'
 #' Fits a flexible threshold to the provided data to extract exceedences
-#' for further modelling. mention tau? using the function
+#' for further modelling using quantile regression. using boosting?
+#' mention tau? using the function
 #' [`mboost::mboost()`][`mboost::mboost`].
 #'
 #' @inheritParams mboost::mboost
 #'
-#' @param tau bla bla
+#' @param tau quantile level, level above which we would like the exceedences
 #'
-#' @param mstop bla bla
+#' @param mstop an integer giving the number of initial boosting iterations.
+#' If mstop = 0, the offset model is returned. (definition from boost_control)
 #'
 #' @return Returns a vector of fitted values which represent the threshold
 #' for a given value of the covariate
