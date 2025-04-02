@@ -36,8 +36,9 @@ scoring algorithm.}
 
 \item{sigma.link, xi.link}{Character scalars to set the respective
 link functions for the scale (\code{sigma}) and shape (\code{xi})
-parameters. The latter is passed to \code{\link[gamlss:gamlss]{gamlss::gamlss()}}
-as \code{nu.link}.}
+parameters. The latter (\code{xi.link}) is passed to
+\code{\link[gamlss:gamlss]{gamlss::gamlss()}} as \code{sigma.link} as \code{xi} is the
+second GP parameter.}
 
 \item{stepLength}{A numeric vector of positive values. The initial
 values of the step lengths \code{sigma.step} and \code{nu.step} passed to
@@ -91,6 +92,21 @@ the model and the fitting algorithm.
 # Load gamlss, for the function pb()
 library(gamlss)
 
+##### Season and direction?
+
+set.seed(512024)
+n <- 100
+x1 <- stats::runif(n)
+x2 <- stats::runif(n)
+sigma <- 1 + 2 * x1 + 3 * x2
+xi <- 0.1
+y <- nieve::rGPD2(n = 1, scale = sigma, shape = xi)
+data <- data.frame(y = as.numeric(y), x = x)
+plot(x1, y)
+plot(x2, y)
+fit1 <- fitGP(y ~ pb(x1) + pb(x2), data = data)
+fit2 <- fitGP(y ~ pb(x1) * pb(x2), data = data)
+
 ##### Simulated data
 
 set.seed(512024)
@@ -128,7 +144,7 @@ mod <- fitGP(y ~ pb(x), data = data, method = mixed(4, 30), scoring = "quasi",
 mod <- fitGP(y ~ pb(x), data = data, method = CG(150), steps = TRUE)
 }
 \seealso{
-\code{\link{GP}},
+\code{\link{GenPareto}},
 \code{\link[gamlss.dist:gamlss.family]{gamlss.dist::gamlss.family()}},
 \code{\link[gamlss:gamlss]{gamlss::gamlss()}}
 }

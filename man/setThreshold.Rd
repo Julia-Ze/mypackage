@@ -23,10 +23,12 @@ setThreshold(
 
 \item{data}{a data frame containing the variables occurring in the formula, e.g. \code{data=aids}. If this is missing, the variables should be on the search list.}
 
-\item{tau}{Percentage level of}
+\item{tau}{A numeric scalar \eqn{\tau} between 0 and 1 passed as the
+argument \code{tau} to the \code{\link[mboost:Family]{Quantreg}}. The threshold is set
+at an estimate of the \eqn{100\tau\%} conditional quantile of the response
+given the values of the covariates.}
 
-\item{mstop}{The argument \code{mstop} to
-\code{\link[mboost:control]{mboost::boost_control}}.}
+\item{mstop}{The argument \code{mstop} to \code{\link[mboost:control]{mboost::boost_control}}.}
 
 \item{replace}{A character vector. All instances of \code{pb()}, for example, in
 \code{formula} will be replaced by \code{bbs()} for use in setting the threshold
@@ -37,8 +39,7 @@ The special cases of the cyclic spline functions \code{pbc(.)} and \code{cy(.)} 
 replaced by \code{bbs(., cyclic = TRUE)} and \code{bbs(., cyclic = TRUE)}
 respectively.}
 
-\item{...}{Additional arguments to be passed to
-\code{\link[mboost:control]{mboost::boost_control}}.}
+\item{...}{Additional arguments to be passed to \code{\link[mboost:control]{mboost::boost_control}}.}
 }
 \value{
 An object of class \code{mboost} returned by \code{\link[mboost:gamboost]{mboost::mboost}}.
@@ -66,7 +67,7 @@ Dat$y <- SSlogis(Dat$x, 10, 12, 2) * rnorm(500, 1, 0.1)
 fit <- setThreshold(y ~ pb(x), data = Dat)
 plot(fit)
 # Cyclic spline function
-fit <- setThreshold(y ~ cy(x), data = Dat)
+fit <- setThreshold(y ~ pbc(x), data = Dat)
 plot(fit)
 
 ## The northern North Sea significant wave height data
@@ -80,24 +81,24 @@ plot(waves$NAO, waves$Hs)
 points(waves$NAO, threshold, col = "red", pch = 16)
 
 # Season only
-fit <- setThreshold(Hs ~ cy(season), data = waves)
+fit <- setThreshold(Hs ~ pbc(season), data = waves)
 threshold <- fitted(fit)
 plot(waves$season, waves$Hs)
 points(waves$season, threshold, col = "red", pch = 16)
 
 # Direction only
-fit <- setThreshold(Hs ~ cy(direction), data = waves)
+fit <- setThreshold(Hs ~ pbc(direction), data = waves)
 threshold <- fitted(fit)
 plot(waves$direction, waves$Hs)
 points(waves$direction, threshold, col = "red", pch = 16)
 
 # Season and direction
-fit <- setThreshold(Hs ~ cy(season) + cy(direction), data = waves)
+fit <- setThreshold(Hs ~ pbc(season) + pbc(direction), data = waves)
 par(mfrow = c(2, 1))
 plot(fit)
 
 # NAO, season and direction
-fit <- setThreshold(Hs ~ pb(NAO) + cy(season) + cy(direction), data = waves)
+fit <- setThreshold(Hs ~ pb(NAO) + pbc(season) + pbc(direction), data = waves)
 par(mfrow = c(2, 2))
 plot(fit)
 
