@@ -83,6 +83,8 @@
 #'   * `u, exc_u`: numeric vectors of threshold values for all the observations
 #'     (`u`) and only the threshold exceedances (`exc_u`).
 #'   * `GPcall`: the call to `fitThresholdGP`.
+#'   * `threshold`: the fitted threshold model object returned from [`mboost::mboost`].
+#'   * `p_exc`: the probability of threshold exceedance, equal to `1 - tau`.
 #'
 #' @seealso [`GenPareto`], [`fitGP`], [`setThreshold`],
 #'   [`gamlss.dist::gamlss.family()`][`gamlss.dist::gamlss.family`],
