@@ -333,6 +333,8 @@ fitThresholdGP <- function(formula, xi.formula = formula, data, tau = 0.75,
   # print.gamlssx() and summary.gamlssx(), rather than the verbose call to
   # gamlss::gamlss()
   mod$GPcall <- match.call()
+  mod$threshold <- threshold
+  mod$p_exc <- 1- tau
   class(mod) <- c("gamlssx", class(mod))
   return(mod)
 }
