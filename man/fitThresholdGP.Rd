@@ -118,6 +118,8 @@ response exceeds the threshold, that is, the threshold exceedances.
 \item \verb{u, exc_u}: numeric vectors of threshold values for all the observations
 (\code{u}) and only the threshold exceedances (\code{exc_u}).
 \item \code{GPcall}: the call to \code{fitThresholdGP}.
+\item \code{threshold}: the fitted threshold model object returned from \code{\link[mboost:gamboost]{mboost::mboost}}.
+\item \code{p_exc}: the probability of threshold exceedance, equal to \code{1 - tau}.
 }
 }
 \description{

@@ -218,6 +218,12 @@
 #' summary(p)
 #' p <- fitted(fit4, what = "sigma")
 #' summary(p)
+#'
+#' # How to calculate the threshold for a storm that arrives mid-January
+#' # from direction 250
+#' newdata <- data.frame(season = 0.5 / 12, direction = 250)
+#' predict(fit3$threshold, newdata = newdata)
+#'
 #' @export
 fitThresholdGP <- function(formula, xi.formula = formula, data, tau = 0.75,
                            quantile.formula, mstop = 1000,
