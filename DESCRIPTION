@@ -1,10 +1,14 @@
-Package: mypackage
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Package: gamlssx
+Title: R package for the modelling of extreme values using the POT method
+Version: 1.0.0
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: The package enables the user to perform extreme value analysis 
+  using the Peaks Over Threshold method of extracting extremes. It allows users 
+  to define a flexible threshold and fits Generalized Additive Models for Location,
+  Scale and Shape (GAMLSS) to the threshold excesses which enables smooth, 
+  covariate-dependent modelling of extremes.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

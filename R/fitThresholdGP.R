@@ -77,7 +77,7 @@
 #'
 #'   The following components are added to the returned object list.
 #'
-#'   * `all_data`: the input data `data`.
+#'   * `data`: the input data `data`.
 #'   * `exc_data`: a subset on `data` containing only rows for which the
 #'      response exceeds the threshold, that is, the threshold exceedances.
 #'   * `u, exc_u`: numeric vectors of threshold values for all the observations
@@ -102,8 +102,6 @@
 #' plot(fit1)
 #'
 #' # Plot the data, the threshold and the GP fitted (mean) value
-#' # (Just as a basic check that things look OK)
-#' # (The warning about extrapolation can be ignored)
 #' plot(waves$season, waves$Hs, xlab = "season", ylab = "Hs")
 #' points(waves$season, fit1$u, col = "red", pch = 16)
 #' newdata <- data.frame(season = waves$season)
@@ -116,24 +114,18 @@
 #'
 #' # Plot the fitted values of the GP scale and shape parameters
 #' # Recall that, for gamlss, sigma is mu and xi is sigma
-#' # (Eventually we could avoid this confusion, by creating our own wrapper
-#' #  S3 method functions that use our preferred names.)
 #' plot(fit1$data$season, sigma, xlab = "season", ylab = "GP scale")
 #' plot(fit1$data$season, xi, xlab = "season", ylab = "GP shape")
 #'
 #' # Directional covariate only
 #' fit2 <- fitThresholdGP(Hs ~ pbc(direction), data = waves)
 #' # We get a convergence warning, so start again from the estimates returned
-#' # (We could also set up our function to rename the 'start' arguments.
-#' #  Likewise sigma.fix and xi.fix.)
 #' fit2 <- fitThresholdGP(Hs ~ pbc(direction), data = waves,
 #'                        mu.start = fitted(fit2, what = "mu"),
 #'                        sigma.start = fitted(fit2, what = "sigma"))
 #' summary(fit2)
 #'
 #' # Plot the data, the threshold and the GP fitted (mean) value
-#' # (Just as a basic check that things look OK)
-#' # (The warning about extrapolation can be ignored)
 #' plot(waves$direction, waves$Hs, xlab = "direction", ylab = "Hs")
 #' points(waves$direction, fit2$u, col = "red", pch = 16)
 #' newdata <- data.frame(direction = waves$direction)
@@ -146,8 +138,6 @@
 #'
 #' # Plot the fitted values of the GP scale and shape parameters
 #' # Recall that, for gamlss, sigma is mu and xi is sigma
-#' # (Eventually we could avoid this confusion, by creating our own wrapper
-#' #  S3 method functions that use our preferred names.)
 #' plot(fit2$data$direction, sigma, xlab = "direction", ylab = "GP scale")
 #' plot(fit2$data$direction, xi, xlab = "direction", ylab = "GP shape")
 #'
@@ -163,14 +153,14 @@
 #' directions <- 0:360
 #'
 #' # Estimated effect of direction in January
-#' mid_january <- data.frame(direction = directions, season = 0.5)
+#' mid_january <- data.frame(direction = directions, season = 0.5 / 12)
 #' xi_january <- predict(fit3, newdata = mid_january, what = "sigma",
 #'                       type = "response")
 #' plot(directions, xi_january, type = "l", xlab = "direction", ylab = "xi",
 #'      main = "January", lwd = 2)
 #'
 #' # Estimated effect of direction in July
-#' mid_july <- data.frame(direction = directions, season = 6.5)
+#' mid_july <- data.frame(direction = directions, season = 6.5 / 12)
 #' xi_july <- predict(fit3, newdata = mid_july, what = "sigma",
 #'                    type = "response")
 #' plot(directions, xi_july, type = "l", xlab = "direction", ylab = "xi",
@@ -180,6 +170,16 @@
 #' # This is just for fun and in case it helps to see that direction has no
 #' # influence on the estimated effect of season and vice versa
 #' rgl::plot3d(waves$season, waves$direction, fit3$u)
+#'
+#' # How to calculate the threshold for a storm that arrives mid-January
+#' # from direction 250
+#' newdata <- data.frame(season = 0.5 / 12, direction = 250)
+#' predict(fit3$threshold, newdata = newdata)
+#'
+#' # How to calculate the fitted values of the GP scale and shape parameters
+#' # type = "response" accounts for the (log) link for the scale parameter
+#' predict(fit3, what = "mu", newdata = newdata, type = "response")
+#' predict(fit3, what = "sigma", newdata = newdata)
 #'
 #' # Load mgcv and gamlss.add because we need them for what follows
 #' library(mgcv)
@@ -193,9 +193,6 @@
 #' # We use quantile.formula to set the threshold using an equivalent approach
 #' # We set tau = 0.5 because this is what Northrop, Jonathan and Randell (2016)
 #' # did.
-#' # (Note that their results are rather different, especially for xi.
-#' #  This isn't surprising because they took a different approach in some
-#' #  areas. )
 #' fit4 <- fitThresholdGP(Hs ~ ga(~te(direction, season, bs = "cc"),
 #'                        knots=list(direction = c(0, 360), season = c(0, 1))),
 #'                        data = waves, tau = 0.5,
@@ -218,12 +215,6 @@
 #' summary(p)
 #' p <- fitted(fit4, what = "sigma")
 #' summary(p)
-#'
-#' # How to calculate the threshold for a storm that arrives mid-January
-#' # from direction 250
-#' newdata <- data.frame(season = 0.5 / 12, direction = 250)
-#' predict(fit3$threshold, newdata = newdata)
-#'
 #' @export
 fitThresholdGP <- function(formula, xi.formula = formula, data, tau = 0.75,
                            quantile.formula, mstop = 1000,

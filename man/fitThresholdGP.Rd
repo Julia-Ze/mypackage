@@ -112,7 +112,7 @@ Returns a \code{gamlss} object. See the \strong{Value} section of
 
 The following components are added to the returned object list.
 \itemize{
-\item \code{all_data}: the input data \code{data}.
+\item \code{data}: the input data \code{data}.
 \item \code{exc_data}: a subset on \code{data} containing only rows for which the
 response exceeds the threshold, that is, the threshold exceedances.
 \item \verb{u, exc_u}: numeric vectors of threshold values for all the observations
@@ -212,14 +212,14 @@ summary(fit3)
 directions <- 0:360
 
 # Estimated effect of direction in January
-mid_january <- data.frame(direction = directions, season = 0.5)
+mid_january <- data.frame(direction = directions, season = 0.5 / 12)
 xi_january <- predict(fit3, newdata = mid_january, what = "sigma",
                       type = "response")
 plot(directions, xi_january, type = "l", xlab = "direction", ylab = "xi",
      main = "January", lwd = 2)
 
 # Estimated effect of direction in July
-mid_july <- data.frame(direction = directions, season = 6.5)
+mid_july <- data.frame(direction = directions, season = 6.5 / 12)
 xi_july <- predict(fit3, newdata = mid_july, what = "sigma",
                    type = "response")
 plot(directions, xi_july, type = "l", xlab = "direction", ylab = "xi",
@@ -229,6 +229,16 @@ plot(directions, xi_july, type = "l", xlab = "direction", ylab = "xi",
 # This is just for fun and in case it helps to see that direction has no
 # influence on the estimated effect of season and vice versa
 rgl::plot3d(waves$season, waves$direction, fit3$u)
+
+#' # How to calculate the threshold for a storm that arrives mid-January
+# from direction 250
+newdata <- data.frame(season = 0.5 / 12, direction = 250)
+predict(fit3$threshold, newdata = newdata)
+
+# How to calculate the fitted values of the GP scale and shape parameters
+# type = "response" accounts for the (log) link for the scale parameter
+predict(fit3, what = "mu", newdata = newdata, type = "response")
+predict(fit3, what = "sigma", newdata = newdata)
 
 # Load mgcv and gamlss.add because we need them for what follows
 library(mgcv)

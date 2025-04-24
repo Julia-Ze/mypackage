@@ -32,8 +32,8 @@ Calculates the expected information matrix for the GP distribution.
 \code{gpExpInfo} calculates, for a single pair of values
 \eqn{(\sigma, \xi) = } \verb{(scale, shape)}, the expected information matrix for a
 single observation from a GP distribution with distribution function
-\deqn{F(x) = P(X \leq x) = 1 - \left[ 1 + \displaystyle\frac{\xi x}{\sigma} \right]_+^{-1/\xi}}
-where \eqn{x_+ = \max(x, 0)}.
+\deqn{F(x) = P(X \leq x) = 1 - \left[ 1 + \displaystyle\frac{\xi x}{\sigma}
+  \right]_+^{-1/\xi}} where \eqn{x_+ = \max(x, 0)}.
 The GP expected information is defined only for \eqn{\xi > -0.5}.
 
 The matrix is of the form
